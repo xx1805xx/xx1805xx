@@ -1,0 +1,8 @@
+/* Manrope, bundled locally under the SIL Open Font License (OFL-Manrope.txt). */
+@font-face {
+  font-family: "Aegis Sans";
+  src: url("./manrope.ttf") format("truetype");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}

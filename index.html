@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#14251f" />
+    <meta
+      name="description"
+      content="Aegis: analisi locale dei file, controlli del browser e ricerca di vulnerabilità note. I tuoi file restano sul tuo dispositivo."
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.osv.dev; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <title>Aegis — Il tuo spazio di sicurezza</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <script src="./assets/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Vai al contenuto</a>
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview" aria-label="Aegis, panoramica"
+        ><span class="brand-mark" data-icon="shield"></span
+        ><span>aegis<span class="brand-dot">.</span></span></a
+      >
+      <div class="workspace">
+        <span class="workspace-icon" data-icon="layers"></span>
+        <div>Il mio workspace<small>Spazio personale</small></div>
+        <span class="workspace-dot"></span>
+      </div>
+      <p class="nav-label">WORKSPACE</p>
+      <nav aria-label="Navigazione principale">
+        <a class="nav-item active" href="#overview" data-view="overview"
+          ><span data-icon="grid"></span>Panoramica<span
+            class="nav-active-dot"
+          ></span
+        ></a>
+        <a class="nav-item" href="#files" data-view="files"
+          ><span data-icon="scan"></span>Analisi file</a
+        >
+        <a class="nav-item" href="#browser" data-view="browser"
+          ><span data-icon="globe"></span>Check del browser</a
+        >
+        <a class="nav-item" href="#vulnerabilities" data-view="vulnerabilities"
+          ><span data-icon="bug"></span>Vulnerabilità<span class="nav-tag"
+            >OSV</span
+          ></a
+        >
+        <a class="nav-item" href="#reports" data-view="reports"
+          ><span data-icon="report"></span>Report<span
+            class="nav-count"
+            id="report-count"
+            >0</span
+          ></a
+        >
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="private-card">
+          <span data-icon="lock"></span><strong>I tuoi file. Solo tuoi.</strong>
+          <p>L’analisi dei file avviene nel browser, senza upload.</p>
+          <span class="private-pill"><i></i> Elaborazione locale</span>
+        </div>
+        <a class="nav-item" href="#guide" data-view="guide"
+          ><span data-icon="help"></span>Guida e trasparenza</a
+        >
+        <div class="profile">
+          <span class="avatar">TU</span>
+          <div>Il tuo dispositivo<small>Nessun account necessario</small></div>
+          <span data-icon="chevrons"></span>
+        </div>
+      </div>
+    </aside>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <button
+          class="icon-button mobile-menu"
+          id="menu-toggle"
+          aria-label="Apri menu"
+          aria-expanded="false"
+          aria-controls="sidebar"
+        >
+          <span data-icon="menu"></span>
+        </button>
+        <div class="breadcrumb">
+          Workspace<span>/</span
+          ><strong id="breadcrumb-title">Panoramica</strong>
+        </div>
+        <div class="topbar-right">
+          <span class="local-badge"><i></i>Modalità locale</span
+          ><a
+            class="help-button"
+            href="#guide"
+            aria-label="Guida e limiti dell’analisi"
+            ><span data-icon="help"></span></a
+          ><span class="top-avatar">TU</span>
+        </div>
+      </header>
+      <main id="main" tabindex="-1">
+        <section
+          class="view"
+          id="view-overview"
+          aria-labelledby="overview-title"
+        >
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">
+                <span class="tiny-line"></span> IL TUO CENTRO DI SICUREZZA
+              </p>
+              <h1 id="overview-title">Più chiarezza.<br />Più controllo.</h1>
+              <p class="subtitle">
+                Conosci i rischi. Controlla i tuoi file. Riparti più sicuro.
+              </p>
+            </div>
+            <a href="#files" class="button primary heading-action"
+              ><span data-icon="plus"></span>Nuova analisi</a
+            >
+          </div>
+
+          <div class="hero-grid">
+            <article class="status-card">
+              <div class="card-top">
+                <span class="section-kicker">IL PUNTO DI PARTENZA</span
+                ><span class="outline-badge"><i></i>Pronto per l’analisi</span>
+              </div>
+              <div class="status-content">
+                <div class="shield-orbit">
+                  <div class="orbit-dot one"></div>
+                  <div class="orbit-dot two"></div>
+                  <div class="shield-core" data-icon="shield-check"></div>
+                </div>
+                <div class="status-copy">
+                  <h2>La sicurezza parte<br />da un controllo.</h2>
+                  <p>
+                    Nessun verdetto al buio. Analizza i file che scegli e
+                    verifica le impostazioni esposte dal browser.
+                  </p>
+                  <a href="#guide" class="text-link"
+                    >Scopri cosa possiamo verificare<span
+                      data-icon="arrow-right"
+                    ></span
+                  ></a>
+                </div>
+              </div>
+              <div class="status-footer">
+                <span
+                  ><span data-icon="lock"></span>Nessun file lascia il
+                  dispositivo</span
+                ><span
+                  ><span data-icon="check"></span>Nessuna installazione</span
+                >
+              </div>
+            </article>
+            <article class="privacy-hero">
+              <div class="privacy-pattern" aria-hidden="true"></div>
+              <span class="small-icon" data-icon="fingerprint"></span
+              ><span class="section-kicker">PRIVACY, PER SCELTA</span>
+              <h2>Il controllo è tuo.<br />I dati anche.</h2>
+              <p>
+                File elaborati qui. Risultati salvati solo se lo decidi. Nessun
+                account, nessun tracciamento.
+              </p>
+              <a href="#guide" class="privacy-link"
+                >Come funziona<span data-icon="arrow-up-right"></span
+              ></a>
+            </article>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <span class="stat-icon green" data-icon="files"></span>
+              <div>
+                <p>File analizzati</p>
+                <strong id="stat-files">0</strong
+                ><span class="stat-caption">in questa sessione</span>
+              </div>
+              <span class="stat-mini">LOCALE</span>
+            </article>
+            <article class="stat-card">
+              <span class="stat-icon amber" data-icon="flag"></span>
+              <div>
+                <p>File da rivedere</p>
+                <strong id="stat-findings">0</strong
+                ><span class="stat-caption">indizi, non diagnosi</span>
+              </div>
+              <span class="stat-mini">DA VERIFICARE</span>
+            </article>
+            <article class="stat-card">
+              <span class="stat-icon blue" data-icon="cloud-off"></span>
+              <div>
+                <p>File inviati online</p>
+                <strong>0<span class="stat-unit"> byte</span></strong
+                ><span class="stat-caption"
+                  >i file restano sul dispositivo</span
+                >
+              </div>
+              <span class="stat-mini">PRIVATO</span>
+            </article>
+          </div>
+
+          <div class="tools-grid">
+            <article class="panel scan-panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>Uno sguardo ai tuoi file</h2>
+                  <p>Un allegato sospetto? Comincia da qui.</p>
+                </div>
+                <span class="subtle-icon" data-icon="scan"></span>
+              </div>
+              <div
+                class="drop-zone"
+                id="drop-overview"
+                tabindex="0"
+                role="button"
+                aria-label="Scegli file da analizzare"
+              >
+                <span class="upload-icon" data-icon="upload"></span>
+                <h3>Trascina qui i tuoi file</h3>
+                <p>
+                  oppure <span class="inline-link">scegli dal dispositivo</span>
+                </p>
+                <span class="drop-meta"
+                  >Qualsiasi formato · fino a 128 MiB per file · max 50
+                  file</span
+                >
+              </div>
+              <div class="panel-footnote">
+                <span data-icon="info"></span>Analisi di indicatori e firma di
+                test EICAR. Non sostituisce un antivirus.
+              </div>
+            </article>
+            <article class="panel browser-preview">
+              <div class="panel-heading">
+                <div>
+                  <h2>Il tuo browser, da vicino</h2>
+                  <p>Piccoli controlli. Informazioni utili.</p>
+                </div>
+                <span class="subtle-icon" data-icon="globe"></span>
+              </div>
+              <div class="preview-checks">
+                <div>
+                  <span class="check-icon" data-icon="lock"></span
+                  ><span>Contesto di sicurezza</span
+                  ><span class="neutral-pill" id="preview-secure"
+                    >Da verificare</span
+                  >
+                </div>
+                <div>
+                  <span class="check-icon" data-icon="code"></span
+                  ><span>Integrità dei contenuti</span
+                  ><span class="neutral-pill" id="preview-csp"
+                    >Da verificare</span
+                  >
+                </div>
+                <div>
+                  <span class="check-icon" data-icon="key"></span
+                  ><span>API crittografiche</span
+                  ><span class="neutral-pill" id="preview-crypto"
+                    >Da verificare</span
+                  >
+                </div>
+              </div>
+              <button class="button secondary full" id="quick-browser">
+                Esegui check del browser<span data-icon="arrow-right"></span>
+              </button>
+              <p class="quiet-note">
+                Solo le informazioni accessibili a questa pagina.
+              </p>
+            </article>
+          </div>
+
+          <article class="panel recent-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>
+                  Attività recente<span class="small-counter" id="recent-count"
+                    >0</span
+                  >
+                </h2>
+                <p>Le analisi eseguite in questa sessione.</p>
+              </div>
+              <a href="#reports" class="text-link"
+                >Tutti i report<span data-icon="arrow-right"></span
+              ></a>
+            </div>
+            <div id="recent-activity" class="recent-activity">
+              <div class="empty-inline">
+                <span class="empty-icon" data-icon="activity"></span>
+                <div>
+                  <strong>Si comincia da qui.</strong>
+                  <p>
+                    Avvia la tua prima analisi: i risultati appariranno in
+                    questo spazio.
+                  </p>
+                </div>
+                <a href="#files" class="button ghost"
+                  >Analizza un file<span data-icon="arrow-up-right"></span
+                ></a>
+              </div>
+            </div>
+          </article>
+          <div class="bottom-note">
+            <span data-icon="info"></span>Trasparenza prima di tutto: un sito
+            web non può ispezionare l’intero dispositivo o escludere la presenza
+            di malware.<a href="#guide"
+              >Leggi i limiti<span data-icon="arrow-up-right"></span
+            ></a>
+          </div>
+        </section>
+
+        <section
+          class="view"
+          id="view-files"
+          aria-labelledby="files-title"
+          hidden
+        >
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">ANALISI LOCALE</p>
+              <h1 id="files-title">Ogni file,<br />un po’ più chiaro.</h1>
+              <p class="subtitle">
+                Lettura completa dei byte, impronta SHA-256 e indicatori
+                spiegati.
+              </p>
+            </div>
+            <span class="feature-label"
+              ><span data-icon="lock"></span>Nessun upload</span
+            >
+          </div>
+          <div class="notice">
+            <span data-icon="info"></span>
+            <p>
+              <strong>Un controllo mirato, non un antivirus.</strong> Cerchiamo
+              la firma di test EICAR, formati eseguibili e alcuni indizi nel
+              contenuto. Nessun indicatore rilevato non significa file sicuro.
+              Gli archivi non vengono decompressi e il codice non viene
+              eseguito.
+            </p>
+          </div>
+          <article class="panel">
+            <div
+              class="drop-zone large-drop"
+              id="drop-files"
+              tabindex="0"
+              role="button"
+              aria-label="Scegli file da analizzare"
+            >
+              <span class="upload-icon" data-icon="upload"></span>
+              <h3>Lascia qui i file da controllare</h3>
+              <p>oppure <span class="inline-link">sfoglia i file</span></p>
+              <span class="drop-meta"
+                >Max 50 file · 128 MiB per file · SHA-256 fino a 32 MiB</span
+              >
+            </div>
+            <div class="scan-toolbar">
+              <div>
+                <span data-icon="files"></span
+                ><span id="queue-label">Nessun file selezionato</span>
+              </div>
+              <button id="scan-cancel" class="button danger-outline" hidden>
+                <span data-icon="close"></span>Interrompi
+              </button>
+            </div>
+            <div id="scan-progress" class="scan-progress" hidden>
+              <div>
+                <strong id="scan-current">Lettura in corso…</strong
+                ><span id="scan-percent">0%</span>
+              </div>
+              <progress id="scan-progress-bar" value="0" max="100">0%</progress>
+              <p>I file vengono letti in blocchi, senza modificarli.</p>
+            </div>
+          </article>
+          <div id="file-results" class="file-results" aria-live="polite"></div>
+          <div class="two-column-info">
+            <article class="panel info-panel">
+              <span class="stat-icon green" data-icon="fingerprint"></span>
+              <h3>Un’impronta, non un verdetto</h3>
+              <p>
+                SHA-256 identifica il contenuto di un file. Puoi confrontarlo
+                con l’impronta fornita dall’autore. Da solo, un hash non rileva
+                un malware.
+              </p>
+            </article>
+            <article class="panel info-panel">
+              <span class="stat-icon amber" data-icon="shield"></span>
+              <h3>Hai un sospetto concreto?</h3>
+              <p>
+                Non aprire il file. Aggiorna il tuo antivirus ed esegui una
+                scansione completa con uno strumento di sistema. Non caricare
+                documenti riservati su servizi pubblici.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section
+          class="view"
+          id="view-browser"
+          aria-labelledby="browser-title"
+          hidden
+        >
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">CONTESTO DEL BROWSER</p>
+              <h1 id="browser-title">
+                Verifiche concrete.<br />Risposte leggibili.
+              </h1>
+              <p class="subtitle">
+                Controlli non invasivi, senza richiedere accesso a fotocamera o
+                posizione.
+              </p>
+            </div>
+            <button class="button primary" id="run-browser">
+              <span data-icon="refresh"></span>Esegui controlli
+            </button>
+          </div>
+          <div class="notice">
+            <span data-icon="info"></span>
+            <p>
+              Questi controlli descrivono
+              <strong>questa pagina e le API disponibili</strong>. Non
+              verificano firewall, patch di sistema, estensioni, furti di dati o
+              vulnerabilità dell’intero dispositivo.
+            </p>
+          </div>
+          <div id="browser-summary" class="panel browser-summary">
+            <span class="stat-icon blue" data-icon="globe"></span>
+            <div>
+              <h2>Il browser è pronto per un controllo.</h2>
+              <p>Avvia i controlli per raccogliere evidenze reali.</p>
+            </div>
+          </div>
+          <div
+            id="browser-results"
+            class="browser-results"
+            aria-live="polite"
+          ></div>
+        </section>
+
+        <section
+          class="view"
+          id="view-vulnerabilities"
+          aria-labelledby="vulnerabilities-title"
+          hidden
+        >
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">VULNERABILITÀ NOTE · OSV</p>
+              <h1 id="vulnerabilities-title">
+                Il software giusto.<br />La versione precisa.
+              </h1>
+              <p class="subtitle">
+                Cerca segnalazioni pubbliche per un pacchetto che conosci.
+              </p>
+            </div>
+            <span class="feature-label"
+              ><span data-icon="globe"></span>Ricerca online</span
+            >
+          </div>
+          <div class="notice">
+            <span data-icon="info"></span>
+            <p>
+              Il browser non può leggere l’elenco dei programmi installati.
+              Inserisci manualmente un
+              <strong>pacchetto open source e la sua versione esatta</strong>.
+              La ricerca interroga OSV; non è una scansione del dispositivo né
+              una prova di sfruttabilità.
+            </p>
+          </div>
+          <article class="panel vulnerability-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Verifica un pacchetto</h2>
+                <p>Dati pubblici da Open Source Vulnerabilities.</p>
+              </div>
+              <span class="source-badge"
+                >osv.dev<span data-icon="arrow-up-right"></span
+              ></span>
+            </div>
+            <form id="vulnerability-form">
+              <div class="form-grid">
+                <label
+                  >Ecosistema<select id="ecosystem">
+                    <option value="npm">npm · JavaScript</option>
+                    <option value="PyPI">PyPI · Python</option>
+                    <option value="crates.io">crates.io · Rust</option>
+                    <option value="Go">Go</option>
+                    <option value="Maven">Maven · Java</option>
+                    <option value="RubyGems">RubyGems · Ruby</option>
+                    <option value="Packagist">Packagist · PHP</option>
+                  </select></label
+                ><label
+                  >Nome del pacchetto<input
+                    id="package-name"
+                    type="text"
+                    placeholder="es. lodash"
+                    maxlength="180"
+                    required
+                    autocomplete="off"
+                    spellcheck="false" /></label
+                ><label
+                  >Versione esatta<input
+                    id="package-version"
+                    type="text"
+                    placeholder="es. 4.17.20"
+                    maxlength="80"
+                    required
+                    autocomplete="off"
+                    spellcheck="false"
+                /></label>
+              </div>
+              <div class="form-footer">
+                <p>
+                  <span data-icon="info"></span>A OSV inviamo soltanto
+                  ecosistema, nome e versione. Mai i tuoi file.
+                </p>
+                <button
+                  class="button primary"
+                  type="submit"
+                  id="vulnerability-submit"
+                >
+                  <span data-icon="search"></span>Cerca vulnerabilità
+                </button>
+              </div>
+            </form>
+          </article>
+          <div id="vulnerability-results" aria-live="polite"></div>
+          <article class="panel info-panel version-guide">
+            <span class="stat-icon blue" data-icon="help"></span>
+            <div>
+              <h3>Vuoi verificare Windows, macOS o un’app?</h3>
+              <p>
+                Questa ricerca riguarda i pacchetti supportati da OSV. Per
+                sistemi operativi e applicazioni consulta gli avvisi del
+                produttore e il catalogo NVD, usando il nome e la versione
+                esatti.
+              </p>
+              <a
+                class="text-link"
+                href="https://nvd.nist.gov/vuln/search"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Apri il catalogo NVD<span data-icon="external"></span
+              ></a>
+            </div>
+          </article>
+        </section>
+
+        <section
+          class="view"
+          id="view-reports"
+          aria-labelledby="reports-title"
+          hidden
+        >
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">LE TUE EVIDENZE</p>
+              <h1 id="reports-title">Risultati, con contesto.</h1>
+              <p class="subtitle">
+                Consulta ed esporta i controlli eseguiti, con limiti e dettagli.
+              </p>
+            </div>
+            <button class="button secondary" id="export-all">
+              <span data-icon="download"></span>Esporta JSON
+            </button>
+          </div>
+          <div class="panel report-settings">
+            <div>
+              <strong>Memoria locale dei report</strong>
+              <p>
+                Disattivata per impostazione predefinita. Se attiva, conserva
+                fino a 30 report in questo browser, inclusi nomi e hash. Non
+                salva i file.
+              </p>
+            </div>
+            <label class="switch-label"
+              ><input
+                id="remember-reports"
+                type="checkbox"
+                role="switch"
+              /><span class="switch-track"></span
+              ><span>Ricorda i report</span></label
+            >
+          </div>
+          <div id="reports-list" aria-live="polite"></div>
+          <div class="report-actions">
+            <button class="button danger-outline" id="clear-reports">
+              <span data-icon="trash"></span>Elimina tutti i report
+            </button>
+            <p>Le eliminazioni non modificano i file originali.</p>
+          </div>
+        </section>
+
+        <section
+          class="view"
+          id="view-guide"
+          aria-labelledby="guide-title"
+          hidden
+        >
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">COME FUNZIONA DAVVERO</p>
+              <h1 id="guide-title">Sicurezza, senza<br />false promesse.</h1>
+              <p class="subtitle">
+                Cosa controlliamo, cosa resta fuori e come andare oltre.
+              </p>
+            </div>
+          </div>
+          <div class="guide-grid">
+            <article class="panel info-panel">
+              <span class="stat-icon green" data-icon="check"></span>
+              <h2>Cosa fa Aegis</h2>
+              <ul class="feature-list">
+                <li>
+                  Legge tutti i byte dei file scelti, fino a 128 MiB ciascuno.
+                </li>
+                <li>
+                  Cerca la firma di test EICAR e alcuni indicatori euristici.
+                </li>
+                <li>Calcola SHA-256 per file fino a 32 MiB.</li>
+                <li>Verifica il contesto della pagina e le API del browser.</li>
+                <li>Cerca vulnerabilità note di pacchetti tramite OSV.</li>
+                <li>Esporta report con evidenze e limitazioni.</li>
+              </ul>
+            </article>
+            <article class="panel info-panel">
+              <span class="stat-icon amber" data-icon="info"></span>
+              <h2>Cosa richiede un altro strumento</h2>
+              <ul class="feature-list">
+                <li>Accesso completo a disco, memoria, processi e settori.</li>
+                <li>Rilevamento completo di virus, rootkit o spyware.</li>
+                <li>Analisi interna di archivi, macro e documenti cifrati.</li>
+                <li>Verifica delle patch e dei programmi installati.</li>
+                <li>Accertamento di furti di dati o danni al dispositivo.</li>
+                <li>Rimozione, riparazione o quarantena dei file.</li>
+              </ul>
+            </article>
+          </div>
+          <article class="panel guide-steps">
+            <div class="panel-heading">
+              <div>
+                <h2>Per una scansione completa del dispositivo</h2>
+                <p>
+                  Il passo successivo si fa sul sistema, con strumenti
+                  autorizzati.
+                </p>
+              </div>
+              <span data-icon="monitor"></span>
+            </div>
+            <ol>
+              <li>
+                <span>01</span>
+                <div>
+                  <h3>Aggiorna sistema e protezioni</h3>
+                  <p>
+                    Installa gli aggiornamenti del sistema operativo e aggiorna
+                    il database del tuo antivirus.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <span>02</span>
+                <div>
+                  <h3>Avvia una scansione completa</h3>
+                  <p>
+                    Su Windows usa Sicurezza di Windows → Protezione da virus e
+                    minacce → Opzioni di analisi. Per altri sistemi usa uno
+                    strumento affidabile compatibile con il tuo sistema.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <span>03</span>
+                <div>
+                  <h3>Se sospetti un’intrusione, preserva le prove</h3>
+                  <p>
+                    Evita di eseguire file sospetti. Per furti, danni o
+                    incidenti seri rivolgiti a un professionista: una pagina web
+                    non può confermarli o escluderli.
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </article>
+          <article class="panel sources-panel">
+            <h2>Fonti e metodologia</h2>
+            <p>
+              Niente percentuali di sicurezza inventate. Ogni risultato indica
+              il controllo effettuato e il suo limite.
+            </p>
+            <div class="source-links">
+              <a
+                href="https://developer.mozilla.org/en-US/docs/Web/API/File_System_API"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><span data-icon="code"></span>MDN · Accesso ai file<span
+                  data-icon="external"
+                ></span></a
+              ><a
+                href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><span data-icon="fingerprint"></span>MDN · Impronte
+                crittografiche<span data-icon="external"></span></a
+              ><a
+                href="https://www.eicar.org/download-anti-malware-testfile/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><span data-icon="shield"></span>EICAR · File di test
+                innocuo<span data-icon="external"></span></a
+              ><a
+                href="https://osv.dev/docs/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><span data-icon="bug"></span>OSV · Dati sulle
+                vulnerabilità<span data-icon="external"></span
+              ></a>
+            </div>
+          </article>
+        </section>
+        <footer class="main-footer">
+          <a href="#overview" class="footer-brand">aegis.</a
+          ><span>Più consapevolezza. Meno incertezza.</span
+          ><a href="#guide"
+            >Privacy e metodologia<span data-icon="arrow-up-right"></span
+          ></a>
+        </footer>
+      </main>
+    </div>
+    <input id="file-input" type="file" multiple hidden />
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <dialog id="confirm-dialog">
+      <div class="dialog-icon" data-icon="trash"></div>
+      <h2>Eliminare tutti i report?</h2>
+      <p>
+        Rimuoveremo i risultati dalla sessione e dalla memoria locale di Aegis.
+        I file originali resteranno invariati.
+      </p>
+      <div class="dialog-actions">
+        <button id="confirm-cancel" class="button secondary">Annulla</button
+        ><button id="confirm-delete" class="button danger-solid">
+          Elimina report
+        </button>
+      </div>
+    </dialog>
+    <noscript
+      ><div class="noscript">
+        Attiva JavaScript per eseguire i controlli locali. Nessuna analisi viene
+        effettuata senza JavaScript.
+      </div></noscript
+    >
+  </body>
+</html>

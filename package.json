@@ -1,0 +1,14 @@
+{
+  "name": "aegis-local-security",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static, local-first security checks with transparent scope",
+  "scripts": {
+    "start": "python3 -m http.server 8000 --bind 127.0.0.1",
+    "test": "node --test tests/smoke.cjs",
+    "check": "node --check assets/app.js && node --check assets/scanner.js"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
