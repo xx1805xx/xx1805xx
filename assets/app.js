@@ -106,6 +106,7 @@ function toast(message) {
 function navigate() {
   const names = {
     overview: "Panoramica",
+    device: "Il mio dispositivo",
     files: "Analisi file",
     browser: "Check del browser",
     vulnerabilities: "Vulnerabilità",
@@ -172,7 +173,7 @@ function loadReports() {
             (r) =>
               r &&
               typeof r.id === "string" &&
-              ["file", "browser", "vulnerability"].includes(r.type) &&
+              ["file", "browser", "vulnerability", "device"].includes(r.type) &&
               typeof r.title === "string" &&
               !Number.isNaN(Date.parse(r.createdAt)) &&
               r.data &&
@@ -239,6 +240,8 @@ function reportBadge(report) {
   }
   if (report.type === "browser")
     return `<span class="badge ${report.status === "warning" ? "warning" : "info"}">${report.status === "warning" ? "Da rivedere" : "Controlli completati"}</span>`;
+  if (report.type === "device")
+    return `<span class="badge ${report.status === "warning" ? "warning" : "info"}">${report.status === "warning" ? "Verificare gli esiti" : "Vedi copertura"}</span>`;
   return `<span class="badge ${report.status === "warning" ? "warning" : "info"}">${report.status === "warning" ? "Segnalazioni presenti" : "Nessuna corrispondenza"}</span>`;
 }
 function updateDashboard() {
@@ -257,7 +260,7 @@ function updateDashboard() {
     .slice(0, 4)
     .map(
       (report) =>
-        `<div class="report-row"><span class="stat-icon ${report.status === "warning" ? "amber" : "green"}">${icon(report.type === "file" ? "files" : report.type === "browser" ? "globe" : "bug")}</span><div><h3>${esc(safeName(report.title))}</h3><p>${esc(date(report.createdAt))} · ${esc(report.summary)}</p></div>${reportBadge(report)}</div>`,
+        `<div class="report-row"><span class="stat-icon ${report.status === "warning" ? "amber" : "green"}">${icon(report.type === "file" ? "files" : report.type === "browser" ? "globe" : report.type === "device" ? "monitor" : "bug")}</span><div><h3>${esc(safeName(report.title))}</h3><p>${esc(date(report.createdAt))} · ${esc(report.summary)}</p></div>${reportBadge(report)}</div>`,
     )
     .join("");
 }
@@ -757,7 +760,7 @@ function renderReports() {
     return;
   }
   $("reports-list").innerHTML =
-    `<div class="panel">${reports.map((report) => `<article class="report-row"><span class="stat-icon ${report.status === "warning" ? "amber" : "green"}">${icon(report.type === "file" ? "files" : report.type === "browser" ? "globe" : "bug")}</span><div><h3>${esc(safeName(report.title))}</h3><p>${esc(date(report.createdAt))} · ${esc(report.summary)}</p><details><summary>Dettagli e limiti</summary><pre>${esc(JSON.stringify(report.data, null, 2))}</pre></details></div>${reportBadge(report)}<button class="button secondary" data-export="${esc(report.id)}" aria-label="Esporta report ${esc(safeName(report.title))}">${icon("download")}JSON</button></article>`).join("")}</div>`;
+    `<div class="panel">${reports.map((report) => `<article class="report-row"><span class="stat-icon ${report.status === "warning" ? "amber" : "green"}">${icon(report.type === "file" ? "files" : report.type === "browser" ? "globe" : report.type === "device" ? "monitor" : "bug")}</span><div><h3>${esc(safeName(report.title))}</h3><p>${esc(date(report.createdAt))} · ${esc(report.summary)}</p><details><summary>Dettagli e limiti</summary><pre>${esc(JSON.stringify(report.data, null, 2))}</pre></details></div>${reportBadge(report)}<button class="button secondary" data-export="${esc(report.id)}" aria-label="Esporta report ${esc(safeName(report.title))}">${icon("download")}JSON</button></article>`).join("")}</div>`;
   $("reports-list")
     .querySelectorAll("[data-export]")
     .forEach((button) =>

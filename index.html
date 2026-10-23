@@ -15,7 +15,9 @@
     <title>Aegis — Il tuo spazio di sicurezza</title>
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
     <link rel="stylesheet" href="./assets/style.css" />
+    <link rel="stylesheet" href="./assets/device.css" />
     <script src="./assets/app.js" defer></script>
+    <script src="./assets/device.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Vai al contenuto</a>
@@ -36,6 +38,12 @@
             class="nav-active-dot"
           ></span
         ></a>
+        <a class="nav-item" href="#device" data-view="device"
+          ><span data-icon="monitor"></span>Il mio dispositivo<span
+            class="nav-tag"
+            >TEST</span
+          ></a
+        >
         <a class="nav-item" href="#files" data-view="files"
           ><span data-icon="scan"></span>Analisi file</a
         >
@@ -58,7 +66,7 @@
       <div class="sidebar-bottom">
         <div class="private-card">
           <span data-icon="lock"></span><strong>I tuoi file. Solo tuoi.</strong>
-          <p>L’analisi dei file avviene nel browser, senza upload.</p>
+          <p>File e report elaborati localmente, senza upload automatici.</p>
           <span class="private-pill"><i></i> Elaborazione locale</span>
         </div>
         <a class="nav-item" href="#guide" data-view="guide"
@@ -113,8 +121,8 @@
                 Conosci i rischi. Controlla i tuoi file. Riparti più sicuro.
               </p>
             </div>
-            <a href="#files" class="button primary heading-action"
-              ><span data-icon="plus"></span>Nuova analisi</a
+            <a href="#device" class="button primary heading-action"
+              ><span data-icon="monitor"></span>Verifica il dispositivo</a
             >
           </div>
 
@@ -148,7 +156,8 @@
                   ><span data-icon="lock"></span>Nessun file lascia il
                   dispositivo</span
                 ><span
-                  ><span data-icon="check"></span>Nessuna installazione</span
+                  ><span data-icon="check"></span>Agente opzionale per
+                  macOS</span
                 >
               </div>
             </article>
@@ -718,6 +727,247 @@
               ></a>
             </div>
           </article>
+        </section>
+        <section
+          class="view"
+          id="view-device"
+          aria-labelledby="device-title"
+          hidden
+        >
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">AGENTE LOCALE · TEST macOS</p>
+              <h1 id="device-title">Il tuo Mac.<br />Controlli sul sistema.</h1>
+              <p class="subtitle">
+                Configurazione, servizi visibili e scansione antivirus della
+                cartella scelta.
+              </p>
+            </div>
+            <span class="feature-label"
+              ><span data-icon="lock"></span>Report sul tuo dispositivo</span
+            >
+          </div>
+          <div class="panel device-identity">
+            <span class="stat-icon green" data-icon="monitor"></span>
+            <div>
+              <h2 id="device-detected">Identificazione in corso…</h2>
+              <p id="device-detection-note">
+                Il browser fornisce solo indizi. Chip e modello esatti
+                richiedono l’agente.
+              </p>
+            </div>
+            <span class="badge info" id="agent-status"
+              >Agente non collegato</span
+            >
+          </div>
+          <div id="agent-setup" class="panel agent-setup">
+            <div class="setup-heading">
+              <span class="stat-icon green" data-icon="layers"></span>
+              <div>
+                <h2>Una volta sul Mac. Poi, un clic.</h2>
+                <p>
+                  Il sito da solo non può leggere il sistema. L’agente apre
+                  questa interfaccia sul tuo Mac e raccoglie evidenze reali.
+                </p>
+              </div>
+            </div>
+            <ol class="agent-steps">
+              <li>
+                <span>01</span>
+                <div>
+                  <h3>Scarica il pacchetto di test</h3>
+                  <p>
+                    Contiene il sito e l’agente Python, con sorgente leggibile.
+                    Non è ancora un’app firmata o notarizzata.
+                  </p>
+                  <a
+                    class="button primary"
+                    id="download-agent"
+                    href="https://github.com/xx1805xx/xx1805xx/archive/refs/heads/gh-pages.zip"
+                    ><span data-icon="download"></span>Scarica Aegis per Mac</a
+                  >
+                </div>
+              </li>
+              <li>
+                <span>02</span>
+                <div>
+                  <h3>Estrai lo ZIP e avvia Aegis</h3>
+                  <p>
+                    Serve Python 3.9 o successivo. Nella cartella estratta
+                    esegui <strong>Avvia Aegis.command</strong>. Si apriranno il
+                    Terminale e l’interfaccia locale. Se necessario, apri il
+                    Terminale nella cartella estratta e usa:
+                  </p>
+                  <div class="command-example">
+                    <code>bash "Avvia Aegis.command"</code
+                    ><button
+                      class="icon-button"
+                      id="copy-launch"
+                      aria-label="Copia comando di avvio"
+                    >
+                      <span data-icon="copy"></span>
+                    </button>
+                  </div>
+                  <a
+                    class="text-link"
+                    href="https://www.python.org/downloads/macos/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >Python per macOS<span data-icon="external"></span
+                  ></a>
+                </div>
+              </li>
+              <li>
+                <span>03</span>
+                <div>
+                  <h3>Premi “Scansiona” nella pagina locale</h3>
+                  <p>
+                    Scegli la cartella. I controlli di configurazione non
+                    richiedono ClamAV. Per l’analisi antivirus serve anche
+                    ClamAV: se usi Homebrew, installalo con
+                    <code>brew install clamav</code>. Nessun pacchetto viene
+                    installato automaticamente.
+                  </p>
+                </div>
+              </li>
+            </ol>
+            <div class="notice">
+              <span data-icon="info"></span>
+              <p id="platform-instructions">
+                Prototipo macOS: Windows e Android non sono ancora implementati.
+                Su iPhone non è possibile una scansione completa del
+                dispositivo. Per chiudere l’agente premi Ctrl+C nel suo
+                Terminale.
+              </p>
+            </div>
+          </div>
+          <div id="agent-controls" hidden>
+            <form id="native-scan-form" class="panel native-options">
+              <div class="panel-heading">
+                <div>
+                  <h2>Controlli reali, ambito esplicito</h2>
+                  <p>
+                    Nessun sudo, cancellazione o modifica di impostazioni.
+                    Cartelle non leggibili restano escluse.
+                  </p>
+                </div>
+                <span class="badge info" id="agent-version"></span>
+              </div>
+              <fieldset id="native-options-fields">
+                <legend>Ambito della scansione file</legend>
+                <div class="scope-options">
+                  <label
+                    ><input
+                      type="radio"
+                      name="native-scope"
+                      value="downloads"
+                      checked
+                    /><span
+                      ><strong>Download</strong
+                      ><small>Un primo test mirato</small></span
+                    ></label
+                  ><label
+                    ><input
+                      type="radio"
+                      name="native-scope"
+                      value="home"
+                    /><span
+                      ><strong>Cartella utente</strong
+                      ><small>Può richiedere molto tempo</small></span
+                    ></label
+                  ><label
+                    ><input
+                      type="radio"
+                      name="native-scope"
+                      value="selected"
+                      id="scope-selected"
+                      disabled
+                    /><span
+                      ><strong>Cartella scelta</strong
+                      ><small id="selected-directory"
+                        >Nessuna cartella scelta</small
+                      ></span
+                    ></label
+                  >
+                </div>
+                <button
+                  type="button"
+                  class="button secondary"
+                  id="choose-native-folder"
+                >
+                  <span data-icon="files"></span>Scegli una cartella sul Mac
+                </button>
+                <div class="native-checkboxes">
+                  <label
+                    ><input id="native-malware" type="checkbox" checked /><span
+                      ><strong>Analisi antivirus con ClamAV</strong
+                      ><small
+                        >Se mancano il motore o le firme, l’esito sarà “Non
+                        disponibile”, mai “nessun virus”.</small
+                      ></span
+                    ></label
+                  ><label
+                    ><input
+                      id="native-signatures"
+                      type="checkbox"
+                      checked
+                    /><span
+                      ><strong>Aggiorna le firme prima dell’analisi</strong
+                      ><small
+                        >Contatta i server ClamAV e salva il database locale.
+                        Può scaricare centinaia di MB.</small
+                      ></span
+                    ></label
+                  ><label
+                    ><input id="native-updates" type="checkbox" /><span
+                      ><strong>Consulta gli aggiornamenti Apple</strong
+                      ><small
+                        >Controllo online aggiuntivo. Non installa aggiornamenti
+                        e non verifica tutte le CVE.</small
+                      ></span
+                    ></label
+                  >
+                </div>
+              </fieldset>
+              <div class="native-scan-actions">
+                <p>
+                  Max 128 MiB per file, 512 MiB per contenitore espanso e un’ora
+                  per la scansione antivirus. Collegamenti simbolici esclusi. La
+                  scansione non copre ogni byte del Mac.
+                </p>
+                <button class="button primary" type="submit" id="native-start">
+                  <span data-icon="scan"></span>Scansiona il Mac</button
+                ><button
+                  class="button danger-outline"
+                  type="button"
+                  id="native-cancel"
+                  hidden
+                >
+                  <span data-icon="close"></span>Interrompi
+                </button>
+              </div>
+            </form>
+            <div id="native-progress" class="panel native-progress" hidden>
+              <span class="spinner" aria-hidden="true"></span>
+              <div>
+                <h2 id="native-current">Preparazione…</h2>
+                <p id="native-progress-note">
+                  Raccolta delle evidenze sul Mac. Nessuna percentuale stimata.
+                </p>
+              </div>
+            </div>
+            <div id="native-report" aria-live="polite"></div>
+          </div>
+          <div class="notice native-limit-note">
+            <span data-icon="info"></span>
+            <p>
+              <strong>Nessuna garanzia di assenza di compromissione.</strong>
+              Questa versione non analizza memoria o settori del disco, non
+              accerta furti, non ripara file corrotti e non esegue test di
+              injection su applicazioni o reti. I sistemi Apple possono
+              proteggere dati che l’agente non può leggere.
+            </p>
+          </div>
         </section>
         <footer class="main-footer">
           <a href="#overview" class="footer-brand">aegis.</a

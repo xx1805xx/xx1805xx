@@ -113,6 +113,7 @@ test("all pages fit desktop, tablet and mobile; menu works by keyboard", async (
       await page.setViewportSize({ width, height: 900 });
       for (const view of [
         "overview",
+        "device",
         "files",
         "browser",
         "vulnerabilities",
@@ -305,13 +306,11 @@ test("cancel stops a worker and never creates a completed result for unfinished 
         }
       };
     });
-    await page
-      .locator("#file-input")
-      .setInputFiles({
-        name: "cancel.txt",
-        mimeType: "text/plain",
-        buffer: Buffer.from("cancel me"),
-      });
+    await page.locator("#file-input").setInputFiles({
+      name: "cancel.txt",
+      mimeType: "text/plain",
+      buffer: Buffer.from("cancel me"),
+    });
     await page.locator("#scan-cancel").click();
     await page.waitForFunction(
       () => document.querySelector("#scan-progress").hidden,
@@ -474,3 +473,195 @@ test("filenames cannot execute markup; screenshots are generated for visual revi
       animations: "disabled",
     });
   }));
+
+test("public device page gives real setup instructions without claiming a Mac model", async () =>
+  withPage(async (page) => {
+    await page.goto(base + "/#device");
+    assert.equal(await page.locator("#agent-setup").isVisible(), true);
+    assert.equal(await page.locator("#agent-controls").isVisible(), false);
+    assert.match(
+      await page.locator("#download-agent").getAttribute("href"),
+      /github\.com\/xx1805xx\/xx1805xx\/archive/,
+    );
+    assert.match(await page.locator("#agent-setup").innerText(), /Python 3.9/);
+    assert.doesNotMatch(
+      await page.locator("#device-detected").innerText(),
+      /Apple M6|MacBookPro\d/,
+    );
+  }));
+
+test("native UI authenticates, preserves unavailable checks, exports and deduplicates reports (mocked Mac)", async () =>
+  withPage(async (page) => {
+    const fixture = {
+      schema: "aegis-native-report-1",
+      id: "fixture-not-real-hardware",
+      startedAt: new Date().toISOString(),
+      finishedAt: new Date().toISOString(),
+      complete: false,
+      scope: "~/Downloads",
+      limits: ["Fixture only; not a real Mac scan."],
+      checks: [
+        {
+          id: "hardware",
+          title: "Identificazione del Mac",
+          status: "info",
+          detail: "Test fixture, not real hardware",
+          evidence: {
+            modelIdentifier: "FixtureMac",
+            chip: "Fixture chip",
+            macOS: "fixture",
+            build: "fixture",
+            architecture: "fixture",
+          },
+        },
+        {
+          id: "malware",
+          title: "Scansione antivirus · ClamAV",
+          status: "blocked",
+          detail:
+            "ClamAV non è installato: nessuna scansione antivirus è stata eseguita.",
+          evidence: {},
+        },
+      ],
+    };
+    let started = false,
+      posted;
+    await page.route(base + "/api/session", (route) =>
+      route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          token: "fixture-session-token",
+          version: "fixture",
+        }),
+      }),
+    );
+    await page.route(base + "/api/state", (route) => {
+      assert.equal(
+        route.request().headers()["x-aegis-token"],
+        "fixture-session-token",
+      );
+      return route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          version: "fixture",
+          supported: true,
+          clamavAvailable: false,
+          selectedDirectory: null,
+          job: {
+            state: started ? "finished" : "idle",
+            current: "Fixture",
+            report: started ? fixture : null,
+          },
+        }),
+      });
+    });
+    await page.route(base + "/api/scan", (route) => {
+      posted = route.request().postDataJSON();
+      started = true;
+      return route.fulfill({
+        status: 202,
+        contentType: "application/json",
+        body: JSON.stringify({
+          version: "fixture",
+          supported: true,
+          job: { state: "finished", current: "Fixture", report: fixture },
+        }),
+      });
+    });
+    await page.goto(base + "/#device");
+    await page.reload();
+    await page.waitForSelector("#agent-controls", { state: "visible" });
+    await page.locator("#native-start").click();
+    await page.waitForSelector(".native-check");
+    assert.deepEqual(posted, {
+      scope: "downloads",
+      scanMalware: true,
+      updateSignatures: true,
+      appleUpdates: false,
+    });
+    assert.match(
+      await page.locator("#native-report").innerText(),
+      /Copertura incompleta/,
+    );
+    assert.match(
+      await page.locator("#native-report").innerText(),
+      /Non disponibile/,
+    );
+    assert.equal(
+      await page.locator("#device-detected").innerText(),
+      "FixtureMac · Fixture chip",
+    );
+    const exported = await exportedReports(page);
+    assert.equal(exported.reports[0].type, "device");
+    assert.equal(exported.reports[0].data.complete, false);
+    assert.doesNotMatch(
+      await page.locator("#reports-list").innerText(),
+      /Nessuna corrispondenza/,
+    );
+    await page.locator("#remember-reports").check();
+    await page.reload();
+    await page.waitForFunction(() =>
+      document.querySelector("#agent-status").textContent.includes("collegato"),
+    );
+    assert.equal(await page.locator("#report-count").innerText(), "1");
+    assert.ok(
+      !(await page.evaluate(() => JSON.stringify(localStorage))).includes(
+        "fixture-session-token",
+      ),
+    );
+  }));
+
+test("real local agent connects on this host and refuses to pretend Linux is macOS", async () => {
+  const agent = spawn("python3", ["native/agent.py", "--no-browser"], {
+    cwd: path.resolve(__dirname, ".."),
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  let text = "";
+  try {
+    const origin = await new Promise((resolve, reject) => {
+      const timer = setTimeout(
+        () => reject(new Error("Agent startup timeout")),
+        5000,
+      );
+      agent.stdout.on("data", (chunk) => {
+        text += chunk;
+        const match = text.match(/http:\/\/127\.0\.0\.1:\d+/);
+        if (match) {
+          clearTimeout(timer);
+          resolve(match[0]);
+        }
+      });
+      agent.on("error", (error) => {
+        clearTimeout(timer);
+        reject(error);
+      });
+    });
+    const context = await browser.newContext();
+    try {
+      const page = await context.newPage();
+      await page.goto(origin + "/#device");
+      await page.waitForFunction(
+        () =>
+          document.querySelector("#agent-status").textContent !==
+          "Agente non collegato",
+      );
+      if (process.platform !== "darwin") {
+        assert.equal(
+          await page.locator("#agent-status").innerText(),
+          "Host non supportato",
+        );
+        assert.equal(await page.locator("#agent-controls").isVisible(), false);
+        assert.match(
+          await page.locator("#platform-instructions").innerText(),
+          /non stai analizzando il tuo Mac da remoto/,
+        );
+      } else {
+        assert.equal(await page.locator("#agent-controls").isVisible(), true);
+      }
+    } finally {
+      await context.close();
+    }
+  } finally {
+    agent.kill("SIGTERM");
+  }
+});

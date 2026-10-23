@@ -1,0 +1,390 @@
+.device-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 23px;
+  margin-bottom: 22px;
+}
+.device-identity > div {
+  min-width: 0;
+}
+.device-identity h2 {
+  font-size: 17px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.device-identity p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.device-identity > .badge {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.agent-setup {
+  padding: 25px;
+}
+.setup-heading {
+  display: flex;
+  gap: 17px;
+  align-items: flex-start;
+}
+.setup-heading h2 {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+.setup-heading p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+  max-width: 680px;
+}
+.agent-steps {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+}
+.agent-steps li {
+  display: flex;
+  gap: 22px;
+  border-top: 1px solid var(--line);
+  padding: 24px 0;
+}
+.agent-steps li > span {
+  font-size: 12px;
+  color: #8da379;
+  padding-top: 3px;
+}
+.agent-steps h3 {
+  font-size: 14px;
+  font-weight: 550;
+}
+.agent-steps p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.9;
+  margin: 9px 0 14px;
+}
+.agent-steps p code {
+  background: #f2f6ec;
+  padding: 2px 5px;
+  color: #61764e;
+  overflow-wrap: anywhere;
+}
+.agent-setup > .notice {
+  margin-bottom: 0;
+}
+.command-example {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f3f6ee;
+  border: 1px solid #e1e8d8;
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin: 12px 0 16px;
+  max-width: 530px;
+}
+.command-example code {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.command-example button {
+  margin-left: auto;
+}
+.native-options {
+  margin-bottom: 20px;
+}
+.native-options fieldset {
+  border: 0;
+  padding: 0 23px 23px;
+  margin: 0;
+  min-width: 0;
+}
+.native-options legend {
+  font-size: 11px;
+  color: #728167;
+  margin-bottom: 12px;
+}
+.scope-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.scope-options > label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.scope-options > label:has(input:checked) {
+  background: #f3f8eb;
+  border-color: #b9d49b;
+}
+.scope-options input {
+  accent-color: #648b45;
+  margin: 2px 0 0;
+  flex-shrink: 0;
+}
+.scope-options strong {
+  font-size: 11px;
+  font-weight: 550;
+  display: block;
+}
+.scope-options small {
+  display: block;
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+.native-checkboxes {
+  border-top: 1px solid var(--line);
+  margin-top: 22px;
+  padding-top: 20px;
+  display: grid;
+  gap: 18px;
+}
+.native-checkboxes > label {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  cursor: pointer;
+}
+.native-checkboxes input {
+  accent-color: #648b45;
+  margin-top: 3px;
+}
+.native-checkboxes strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 550;
+}
+.native-checkboxes small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-top: 5px;
+}
+.native-scan-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  padding: 20px 23px;
+}
+.native-scan-actions > p {
+  font-size: 10px;
+  color: var(--muted);
+  max-width: 530px;
+  line-height: 1.8;
+}
+.native-progress {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.native-progress h2 {
+  font-size: 15px;
+  font-weight: 500;
+}
+.native-progress p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.native-report-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 27px 0 16px;
+}
+.native-report-heading h2 {
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+}
+.native-report-heading p {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 7px;
+  line-height: 1.8;
+}
+.native-counts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 17px;
+}
+.native-check {
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.native-check-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.native-check-heading h3 {
+  font-size: 13px;
+  font-weight: 550;
+}
+.native-check-heading > .badge {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.native-check > p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.9;
+  margin-top: 12px;
+}
+.native-check details {
+  margin-top: 12px;
+  font-size: 10px;
+  color: #6d855a;
+}
+.native-check summary {
+  cursor: pointer;
+}
+.native-check pre {
+  font-size: 10px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 320px;
+  overflow: auto;
+  padding: 14px;
+  background: #f5f7f1;
+  border-radius: 8px;
+  line-height: 1.8;
+}
+.native-limit-note {
+  margin-top: 25px;
+}
+.native-report-limits {
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+.native-report-limits li {
+  margin-bottom: 8px;
+}
+.native-warning {
+  background: #fff8e8;
+  border-color: #efe0bd;
+  color: #8a723d;
+}
+#agent-controls fieldset:disabled {
+  opacity: 0.7;
+}
+#native-report .stat-icon {
+  width: 29px;
+  height: 29px;
+}
+#native-report .stat-icon svg {
+  width: 15px;
+  height: 15px;
+}
+@media (max-width: 1000px) {
+  .scope-options {
+    grid-template-columns: 1fr;
+  }
+  .native-scan-actions {
+    flex-wrap: wrap;
+  }
+  .native-scan-actions > p {
+    width: 100%;
+    max-width: none;
+  }
+  .device-identity {
+    flex-wrap: wrap;
+  }
+  .device-identity > .badge {
+    margin-left: 52px;
+  }
+  .native-report-heading {
+    align-items: flex-start;
+  }
+  .setup-heading h2 {
+    font-size: 20px;
+  }
+}
+@media (max-width: 760px) {
+  .agent-setup {
+    padding: 20px;
+  }
+  .agent-steps li {
+    gap: 15px;
+  }
+  .agent-steps h3 {
+    font-size: 13px;
+  }
+  .agent-steps p {
+    font-size: 10px;
+  }
+  .setup-heading {
+    gap: 13px;
+  }
+  .setup-heading h2 {
+    font-size: 18px;
+  }
+  .setup-heading p {
+    font-size: 11px;
+  }
+  .device-identity {
+    padding: 20px;
+  }
+  .device-identity > div {
+    flex: 1;
+    min-width: 180px;
+  }
+  .device-identity h2 {
+    font-size: 16px;
+  }
+  .device-identity p {
+    font-size: 10px;
+  }
+  .native-report-heading {
+    flex-direction: column;
+  }
+  .native-check-heading {
+    flex-wrap: wrap;
+  }
+  .native-check-heading h3 {
+    flex: 1;
+    min-width: 160px;
+  }
+  .native-check-heading > .badge {
+    margin-left: 39px;
+  }
+  .native-options .panel-heading {
+    align-items: flex-start;
+  }
+  .native-options .panel-heading h2 {
+    font-size: 13px;
+  }
+  .native-options .panel-heading p {
+    font-size: 10px;
+  }
+  .native-checkboxes strong {
+    font-size: 11px;
+  }
+  .command-example code {
+    font-size: 10px;
+  }
+  .agent-steps .text-link {
+    font-size: 9px;
+  }
+}

@@ -1,5 +1,7 @@
 # Aegis
 
+**Novità: [agente macOS di test](native/README.md).** Dalla sezione “Il mio dispositivo” puoi scaricare il progetto, avviare `Avvia Aegis.command` sul Mac ed eseguire controlli nativi e una scansione ClamAV quando il motore è installato. Serve Python 3.9+. Il sito pubblico non accede al Mac da remoto. I controlli macOS richiedono ancora una prova su hardware reale; l'ambiente di sviluppo è Linux.
+
 Sito statico in italiano per analisi locali limitate dei file, controlli del contesto del browser, ricerca di vulnerabilità di pacchetti e report esportabili. HTML, CSS e JavaScript nativi; nessun backend, account, tracker o dipendenza applicativa. Compatibile con GitHub Pages e i suoi sottopercorsi.
 
 ## Avvio
