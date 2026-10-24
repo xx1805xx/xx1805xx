@@ -1,0 +1,14 @@
+This file is encrypted because it contains an unpublished security-research package.
+
+On macOS, place APPLE_PCC_POC_DOWNLOAD.zip.enc in Downloads, open Terminal, and run:
+
+cd "$HOME/Downloads"
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -md sha256 -in APPLE_PCC_POC_DOWNLOAD.zip.enc -out APPLE_PCC_POC_DOWNLOAD.zip
+
+Enter the passphrase supplied separately in the Codex conversation.
+Then verify:
+
+shasum -a 256 APPLE_PCC_POC_DOWNLOAD.zip
+
+Expected SHA-256:
+f1ed2530b11ebbedfb6d72c365ca425eff0258906823d26d2f06f4c882cfde55
